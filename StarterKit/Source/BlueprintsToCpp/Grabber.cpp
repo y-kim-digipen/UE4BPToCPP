@@ -2,6 +2,7 @@
 
 
 #include "Grabber.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -18,8 +19,6 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 	
 }
 
@@ -28,7 +27,24 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
 
-	// ...
+UPhysicsHandleComponent* UGrabber::GetPhysicsComponent()
+{
+	return GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+}
+
+FVector UGrabber::GetHoldLocation()
+{
+	const FVector WorldLocation = GetOwner()->FindComponentByClass<USceneComponent>()->GetComponentLocation();
+	const FVector ForwardVector = GetOwner()->FindComponentByClass<USceneComponent>()->GetForwardVector();
+	return WorldLocation + ForwardVector * HoldDistance;
+}
+
+FVector UGrabber::GetMaxGripLocation()
+{
+	const FVector WorldLocation = GetOwner()->FindComponentByClass<USceneComponent>()->GetComponentLocation();
+	const FVector ForwardVector = GetOwner()->FindComponentByClass<USceneComponent>()->GetForwardVector();
+	return WorldLocation + ForwardVector * MaxGrabDistance;
 }
 
